@@ -2,8 +2,6 @@
 
 
 #include "ALevelStreamActor.h"
-
-#include "SNegativeActionButton.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -15,8 +13,9 @@ AALevelStreamActor::AALevelStreamActor()
 
 	_overlapVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("Overlap Volume"));
 	RootComponent = _overlapVolume;
-
+	_overlapVolume->OnComponentEndOverlap.AddUniqueDynamic(this,&AALevelStreamActor::OverlapEnds);
 	_overlapVolume->OnComponentBeginOverlap.AddUniqueDynamic(this, &AALevelStreamActor::OverlapBegins);
+	
 
 }
 
@@ -38,11 +37,26 @@ void AALevelStreamActor::OverlapBegins(UPrimitiveComponent* OverlappedComponent,
 {
 	
 	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));	
-	if(LevelToLoad!= "")
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("LOADING!"));	
+	if(OtherActor == MyCharacter && LevelToLoad!= "")
 	{
 		FLatentActionInfo LatentInfo;
 		UGameplayStatics::LoadStreamLevel(this, LevelToLoad, true, true, LatentInfo);
 	}
 }
+
+void AALevelStreamActor::OverlapEnds(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	ACharacter* MyCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("UNLOADING!"));	
+	if(OtherActor == MyCharacter && LevelToLoad!= "")
+	{
+		FLatentActionInfo LatentInfo;
+		UGameplayStatics::UnloadStreamLevel(this, LevelToLoad, LatentInfo, false);
+	}
+	
+}
+
+
 

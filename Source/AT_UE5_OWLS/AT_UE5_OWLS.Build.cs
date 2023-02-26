@@ -8,6 +8,8 @@ public class AT_UE5_OWLS : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput","FastNoise" });
+		
+		PrivateDependencyModuleNames.AddRange(new string[]{"ProceduralMeshComponent"});
 	}
 }
