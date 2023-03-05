@@ -10,7 +10,7 @@ AGreedyChunk::AGreedyChunk()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	Mesh = CreateDefaultSubobject<UProceduralMeshComponent>("MyMesh");
-	
+	//blocks = new TArray<BlockType>();
 	MeshData = new FChunkMeshData();
 	PrimaryActorTick.bCanEverTick = false;
 	Blocks.SetNum(size.X * size.Y * size.Z);
@@ -31,12 +31,36 @@ void AGreedyChunk::BeginPlay()
 	GenerateMesh();
 	ApplyMesh();
 
-	FArchive archive;
+	//FArchive archive;
 	//archive << this->MeshData;
-	archive << this->blocks;
-	archive << this->scale;
-	archive << this->size;
+	//archive << this->blocks;
+	//archive << this->scale;
+	//archive << this->size;
 	
+	
+}
+
+void AGreedyChunk::EditChunk(const FIntVector position, const BlockType block)
+{
+	if(position.X > size.X || position.X <0||position.Y > size.Y || position.Y <0||position.Z > size.Z || position.Z <0)
+	{
+		return;
+	}
+	EditChunkMesh(position, block);
+	ClearMesh();
+	GenerateMesh();
+	ApplyMesh();
+}
+void AGreedyChunk::ClearMesh()
+{
+	vertcount = 0;
+	MeshData->Clear();
+}
+
+void AGreedyChunk::EditChunkMesh(const FIntVector position, BlockType block)
+{
+	const int index = GetBlockIndex(position.X,position.Y,position.Z);
+	Blocks[index] = block;
 	
 }
 

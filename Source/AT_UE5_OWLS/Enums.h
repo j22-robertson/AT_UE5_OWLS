@@ -3,12 +3,14 @@
 #pragma once
 
 
-enum class EDirection
+UENUM(BlueprintType)
+enum class EDirection : uint8
 {
 	Forward, Right, Back, Left, Up, Down,
 };
 
-enum class BlockType
+UENUM(BlueprintType)
+enum class BlockType : uint8
 {
 	Null, Air, Stone, Dirt, Grass
 };

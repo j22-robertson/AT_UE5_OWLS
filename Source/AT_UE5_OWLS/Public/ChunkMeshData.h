@@ -14,4 +14,5 @@ struct FChunkMeshData
 	TArray<int> Triangles;
 	TArray<FVector> Normals;
 	TArray<FVector2D> UV0;
+	void Clear();
 };

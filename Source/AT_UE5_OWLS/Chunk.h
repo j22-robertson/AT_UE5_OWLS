@@ -9,7 +9,7 @@
 
 class UProceduralMeshComponent;
 class FastNoiseLite;
-enum class BlockType;
+enum class BlockType : uint8;
 UCLASS()
 class AT_UE5_OWLS_API AChunk : public AActor
 {

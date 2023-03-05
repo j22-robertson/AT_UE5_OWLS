@@ -11,7 +11,7 @@
 
 class UProceduralMeshComponent;
 class FastNoiseLite;
-enum class BlockType;
+enum class BlockType : uint8;
 
 UCLASS()
 class AT_UE5_OWLS_API AGreedyChunk : public AActor
@@ -37,6 +37,11 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	UFUNCTION(BlueprintCallable, Category="GreedyChunk")
+	void EditChunk(const FIntVector position, const BlockType block);
+	
+	void ClearMesh();
+	void EditChunkMesh(const FIntVector position,BlockType block);
 
 public:	
 	// Called every frame
@@ -56,7 +61,7 @@ private:
 	void ApplyMesh() const;
 
 	TObjectPtr<FChunkMeshData> MeshData;
-	TArray<BlockType> blocks;
+	//TArray<BlockType> blocks;
 	
 	
 
