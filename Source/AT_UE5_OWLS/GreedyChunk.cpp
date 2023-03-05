@@ -15,6 +15,7 @@ AGreedyChunk::AGreedyChunk()
 	PrimaryActorTick.bCanEverTick = false;
 	Blocks.SetNum(size.X * size.Y * size.Z);
 	Noise = new FastNoiseLite();
+	
 
 }
 
@@ -29,6 +30,14 @@ void AGreedyChunk::BeginPlay()
 	GenerateBlocks();
 	GenerateMesh();
 	ApplyMesh();
+
+	FArchive archive;
+	//archive << this->MeshData;
+	archive << this->blocks;
+	archive << this->scale;
+	archive << this->size;
+	
+	
 }
 
 // Called every frame

@@ -26,6 +26,7 @@ void AVoxelWorld::BeginPlay()
 			GetWorld()->SpawnActor<AActor>(Chunk, FVector(x *ChunkSize * 100, y*ChunkSize*100,0), FRotator::ZeroRotator);
 		}
 	}
+	
 }
 
 // Called every frame

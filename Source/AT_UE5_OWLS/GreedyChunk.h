@@ -12,6 +12,7 @@
 class UProceduralMeshComponent;
 class FastNoiseLite;
 enum class BlockType;
+
 UCLASS()
 class AT_UE5_OWLS_API AGreedyChunk : public AActor
 {
