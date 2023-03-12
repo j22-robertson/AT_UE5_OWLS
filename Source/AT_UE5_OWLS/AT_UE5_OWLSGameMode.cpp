@@ -2,6 +2,7 @@
 
 #include "AT_UE5_OWLSGameMode.h"
 #include "AT_UE5_OWLSCharacter.h"
+#include "GreedyChunk.h"
 #include "UObject/ConstructorHelpers.h"
 
 AAT_UE5_OWLSGameMode::AAT_UE5_OWLSGameMode()
@@ -12,4 +13,14 @@ AAT_UE5_OWLSGameMode::AAT_UE5_OWLSGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+
+	
 }
+
+void AAT_UE5_OWLSGameMode::WriteSave()
+{
+	
+}
+
+

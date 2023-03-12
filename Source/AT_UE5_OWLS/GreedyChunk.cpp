@@ -16,6 +16,7 @@ AGreedyChunk::AGreedyChunk()
 	Blocks.SetNum(size.X * size.Y * size.Z);
 	Noise = new FastNoiseLite();
 	
+	
 
 }
 
@@ -27,10 +28,64 @@ void AGreedyChunk::BeginPlay()
 	Noise->SetNoiseType(FastNoiseLite::NoiseType_Perlin);
 	Noise->SetFractalType(FastNoiseLite::FractalType_FBm);
 
-	GenerateBlocks();
-	GenerateMesh();
+	FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
+	TArray<uint8> BinaryArray;
+	
+	
+	if (!FFileHelper::LoadFileToArray(BinaryArray, *filepath))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to load data from file: %s"), *filepath);
+		GenerateBlocks();
+		GenerateMesh();
+		
+	}
+	else
+	{
+
+	
+		UE_LOG(LogTemp, Error, TEXT(" load data from file: %s"), *filepath);
+		FMemoryReader FromBinary = FMemoryReader(BinaryArray, true);
+		FromBinary.Seek(0);
+		FromBinary << *MeshData;
+		FromBinary << Blocks;
+		// true, free data after done
+		//FMemoryWriter
+		//Tob-
+
+		//FBufferArchive myData(BinaryArray);
+		//FromBinary.Seek(0);
+		//MeshData FromBinary;
+		//FromBinary <<MeshData;
+		
+		FromBinary.FlushCache();
+	}
+	ToBinary << *MeshData;
+	ToBinary << Blocks;
+	///FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
+	if (!MeshData.IsNull() && FFileHelper::SaveArrayToFile(ToBinary, *filepath))
+	{
+		
+		UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to save data to file: %s"), *filepath);
+	}
+	ToBinary.FlushCache();
+	ToBinary.Empty();
+	
 	ApplyMesh();
 
+	
+
+	// Deserialize the binary data into a FMemoryReader instance
+	//FMemoryReader MemoryReader(BinaryArray, true); // true to free the buffer after done
+	//MemoryReader.Seek(0);
+
+	
+
+	//ToBinary << Blocks;
+	
 	//FArchive archive;
 	//archive << this->MeshData;
 	//archive << this->blocks;
@@ -50,6 +105,23 @@ void AGreedyChunk::EditChunk(const FIntVector position, const BlockType block)
 	ClearMesh();
 	GenerateMesh();
 	ApplyMesh();
+
+	FBufferArchive NewToBinary;
+	NewToBinary << *MeshData;
+	NewToBinary << Blocks;
+	FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
+	if (!MeshData.IsNull() && FFileHelper::SaveArrayToFile(NewToBinary, *filepath))
+	{
+		
+		UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to save data to file: %s"), *filepath);
+	}
+	ToBinary.FlushCache();
+	// Empty the buffer archive to free memory
+	ToBinary.Empty();
 }
 void AGreedyChunk::ClearMesh()
 {

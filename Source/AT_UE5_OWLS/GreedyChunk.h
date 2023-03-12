@@ -22,8 +22,7 @@ class AT_UE5_OWLS_API AGreedyChunk : public AActor
 		BlockType Block;
 		int Normal;
 	};
-	
-
+	FBufferArchive ToBinary;
 
 	
 public:	
@@ -42,10 +41,18 @@ protected:
 	
 	void ClearMesh();
 	void EditChunkMesh(const FIntVector position,BlockType block);
+	
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+UPROPERTY()
+	TArray<BlockType> Blocks;
+	
+	TObjectPtr<FChunkMeshData> MeshData;
+protected:
+	
 private:
 	TObjectPtr<UProceduralMeshComponent> Mesh = nullptr;
 	TObjectPtr<FastNoiseLite> Noise = nullptr;
@@ -54,13 +61,13 @@ private:
 
 
 
-	TArray<BlockType> Blocks;
 
 	void GenerateBlocks();
 	void GenerateMesh();
 	void ApplyMesh() const;
 
-	TObjectPtr<FChunkMeshData> MeshData;
+	
+	
 	//TArray<BlockType> blocks;
 	
 	
@@ -74,3 +81,14 @@ private:
 
 	bool CompareMask(FMask M1, FMask M2) const;
 };
+
+FORCEINLINE FArchive &operator <<(FArchive &Ar, AGreedyChunk& ChunkData )
+{
+	//Ar << ChunkData.MeshData;
+	//Ar << TheStruct.DamageAmount;
+	//Ar << TheStruct.HitLocation;
+	//Ar << TheStruct.ImpulseDir;
+	//Ar << TheStruct.ImpulseStrength;
+	
+	return Ar;
+}
