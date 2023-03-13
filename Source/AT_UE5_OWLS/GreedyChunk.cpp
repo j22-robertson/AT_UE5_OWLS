@@ -10,6 +10,8 @@ AGreedyChunk::AGreedyChunk()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	Mesh = CreateDefaultSubobject<UProceduralMeshComponent>("MyMesh");
+	RootComponent = GetRootComponent();
+	SetRootComponent(RootComponent);
 	//blocks = new TArray<BlockType>();
 	MeshData = new FChunkMeshData();
 	PrimaryActorTick.bCanEverTick = false;
@@ -24,6 +26,7 @@ AGreedyChunk::AGreedyChunk()
 void AGreedyChunk::BeginPlay()
 {
 	Super::BeginPlay();
+	Noise->SetSeed(12391);
 	Noise->SetFrequency(0.03);
 	Noise->SetNoiseType(FastNoiseLite::NoiseType_Perlin);
 	Noise->SetFractalType(FastNoiseLite::FractalType_FBm);
@@ -31,7 +34,7 @@ void AGreedyChunk::BeginPlay()
 	FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
 	TArray<uint8> BinaryArray;
 	
-	
+
 	if (!FFileHelper::LoadFileToArray(BinaryArray, *filepath))
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to load data from file: %s"), *filepath);
@@ -46,7 +49,7 @@ void AGreedyChunk::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT(" load data from file: %s"), *filepath);
 		FMemoryReader FromBinary = FMemoryReader(BinaryArray, true);
 		FromBinary.Seek(0);
-		FromBinary << *MeshData;
+		FromBinary <<*MeshData;
 		FromBinary << Blocks;
 		// true, free data after done
 		//FMemoryWriter
@@ -59,6 +62,7 @@ void AGreedyChunk::BeginPlay()
 		
 		FromBinary.FlushCache();
 	}
+	
 	ToBinary << *MeshData;
 	ToBinary << Blocks;
 	///FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
@@ -109,6 +113,7 @@ void AGreedyChunk::EditChunk(const FIntVector position, const BlockType block)
 	FBufferArchive NewToBinary;
 	NewToBinary << *MeshData;
 	NewToBinary << Blocks;
+	
 	FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
 	if (!MeshData.IsNull() && FFileHelper::SaveArrayToFile(NewToBinary, *filepath))
 	{
