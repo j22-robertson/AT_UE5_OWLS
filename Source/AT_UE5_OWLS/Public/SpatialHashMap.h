@@ -23,6 +23,7 @@ public:
 	
 	void AddActor(AActor* Actor);
 	void RemoveActor(AActor* Actor);
+
 	TMap<FIntVector2, TArray<AActor*>> GridCells;
 	float inverseWorldToGrid;
 private:

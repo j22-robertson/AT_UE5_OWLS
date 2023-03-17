@@ -13,10 +13,12 @@ AGreedyChunk::AGreedyChunk()
 	RootComponent = GetRootComponent();
 	SetRootComponent(RootComponent);
 	//blocks = new TArray<BlockType>();
-	MeshData = new FChunkMeshData();
+	MeshData = FChunkMeshData();
 	PrimaryActorTick.bCanEverTick = false;
 	Blocks.SetNum(size.X * size.Y * size.Z);
 	Noise = new FastNoiseLite();
+	ToBinary.Empty();
+	ToBinary.Seek(0);
 	
 	
 
@@ -49,12 +51,16 @@ void AGreedyChunk::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT(" load data from file: %s"), *filepath);
 		FMemoryReader FromBinary = FMemoryReader(BinaryArray, true);
 		FromBinary.Seek(0);
-		FromBinary <<*MeshData;
+
+		FChunkMeshData SaveMeshData;
+		
+		FromBinary << SaveMeshData;
+		
 		FromBinary << Blocks;
 		// true, free data after done
 		//FMemoryWriter
 		//Tob-
-
+		MeshData = SaveMeshData;
 		//FBufferArchive myData(BinaryArray);
 		//FromBinary.Seek(0);
 		//MeshData FromBinary;
@@ -62,11 +68,14 @@ void AGreedyChunk::BeginPlay()
 		
 		FromBinary.FlushCache();
 	}
-	
-	ToBinary << *MeshData;
-	ToBinary << Blocks;
+	if(!MeshData.Vertices.IsEmpty())
+	{
+			ToBinary << MeshData;
+        	ToBinary << Blocks;
+	}
+
 	///FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
-	if (!MeshData.IsNull() && FFileHelper::SaveArrayToFile(ToBinary, *filepath))
+	if (FFileHelper::SaveArrayToFile(ToBinary, *filepath))
 	{
 		
 		UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
@@ -111,11 +120,11 @@ void AGreedyChunk::EditChunk(const FIntVector position, const BlockType block)
 	ApplyMesh();
 
 	FBufferArchive NewToBinary;
-	NewToBinary << *MeshData;
+	NewToBinary << MeshData;
 	NewToBinary << Blocks;
 	
 	FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
-	if (!MeshData.IsNull() && FFileHelper::SaveArrayToFile(NewToBinary, *filepath))
+	if (MeshData.Vertices.IsEmpty() && FFileHelper::SaveArrayToFile(NewToBinary, *filepath))
 	{
 		
 		UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
@@ -131,7 +140,7 @@ void AGreedyChunk::EditChunk(const FIntVector position, const BlockType block)
 void AGreedyChunk::ClearMesh()
 {
 	vertcount = 0;
-	MeshData->Clear();
+	MeshData.Clear();
 }
 
 void AGreedyChunk::EditChunkMesh(const FIntVector position, BlockType block)
@@ -304,33 +313,33 @@ void AGreedyChunk::GenerateMesh()
 
 void AGreedyChunk::ApplyMesh() const
 {
-	Mesh->CreateMeshSection(0, MeshData->Vertices, MeshData->Triangles, MeshData->Normals, MeshData->UV0, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
+	Mesh->CreateMeshSection(0, MeshData.Vertices, MeshData.Triangles, MeshData.Normals, MeshData.UV0, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
 }
 void AGreedyChunk::CreateQuad(FMask Mask, FIntVector AxisMask, FIntVector V1, FIntVector V2, FIntVector V3, FIntVector V4)
 {
 	const auto Normal = FVector(AxisMask * Mask.Normal);
 
-	MeshData->Vertices.Add(FVector(V1) * 100);
-	MeshData->Vertices.Add(FVector(V2) * 100);
-	MeshData->Vertices.Add(FVector(V3) * 100);
-	MeshData->Vertices.Add(FVector(V4) * 100);
+	MeshData.Vertices.Add(FVector(V1) * 100);
+	MeshData.Vertices.Add(FVector(V2) * 100);
+	MeshData.Vertices.Add(FVector(V3) * 100);
+	MeshData.Vertices.Add(FVector(V4) * 100);
 
-	MeshData->Triangles.Add(vertcount);
-	MeshData->Triangles.Add(vertcount + 2 + Mask.Normal);
-	MeshData->Triangles.Add(vertcount + 2 - Mask.Normal);
-	MeshData->Triangles.Add(vertcount + 3);
-	MeshData->Triangles.Add(vertcount + 1 - Mask.Normal);
-	MeshData->Triangles.Add(vertcount + 1 + Mask.Normal);
+	MeshData.Triangles.Add(vertcount);
+	MeshData.Triangles.Add(vertcount + 2 + Mask.Normal);
+	MeshData.Triangles.Add(vertcount + 2 - Mask.Normal);
+	MeshData.Triangles.Add(vertcount + 3);
+	MeshData.Triangles.Add(vertcount + 1 - Mask.Normal);
+	MeshData.Triangles.Add(vertcount + 1 + Mask.Normal);
 
-	MeshData->UV0.Add(FVector2D(0,0));
-	MeshData->UV0.Add(FVector2D(0,1));
-	MeshData->UV0.Add(FVector2D(1,0));
-	MeshData->UV0.Add(FVector2D(1,1));
+	MeshData.UV0.Add(FVector2D(0,0));
+	MeshData.UV0.Add(FVector2D(0,1));
+	MeshData.UV0.Add(FVector2D(1,0));
+	MeshData.UV0.Add(FVector2D(1,1));
 
-	MeshData->Normals.Add(Normal);
-	MeshData->Normals.Add(Normal);
-	MeshData->Normals.Add(Normal);
-	MeshData->Normals.Add(Normal);
+	MeshData.Normals.Add(Normal);
+	MeshData.Normals.Add(Normal);
+	MeshData.Normals.Add(Normal);
+	MeshData.Normals.Add(Normal);
 	vertcount += 4;
 }
 

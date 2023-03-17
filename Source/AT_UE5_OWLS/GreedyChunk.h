@@ -11,6 +11,7 @@
 
 class UProceduralMeshComponent;
 class FastNoiseLite;
+struct FChunkMeshData;
 enum class BlockType : uint8;
 
 UCLASS()
@@ -50,7 +51,7 @@ public:
 UPROPERTY()
 	TArray<BlockType> Blocks;
 	
-	TObjectPtr<FChunkMeshData> MeshData;
+	FChunkMeshData MeshData;
 protected:
 	
 private:

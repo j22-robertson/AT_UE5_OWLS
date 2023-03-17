@@ -24,9 +24,9 @@ void AVoxelWorld::AddActor(AActor* Actor)
 	FIntVector2 hashkey(FMath::FloorToInt(ActorPosition.X), FMath::FloorToInt(ActorPosition.Y));
 	if(!GridCells.Contains(hashkey))
 	{
-		GridCells.Add(hashkey, TArray<AActor*>());
+		//GridCells.Add(hashkey, TArray<AActor*>());
 	}
-	GridCells[hashkey].Add(Actor);
+//	GridCells[hashkey].Add(Actor);
 }
 
 // Called when the game starts or when spawned
@@ -40,18 +40,13 @@ void AVoxelWorld::BeginPlay()
     		{
     			
     			FIntVector2 hashkey(x,y);
-    			AActor* spawnedActor = GetWorld()->SpawnActor<AActor>(Chunk, FVector(x *ChunkSize * 100, y*ChunkSize*100,0), FRotator::ZeroRotator);
+    			  GetWorld()->SpawnActor<AActor>(Chunk, FVector(x *ChunkSize * 100, y*ChunkSize*100,0), FRotator::ZeroRotator);
     			//GetWorld()->GetSubsystem<>()
-    			if(spawnedActor)
-    			{
     				
-    				//if(!GridCells.Contains(hashkey))
-    				//{
-    					//GridCells.Add(hashkey, TArray<AActor*>());
-    				//}
-    				//GridCells[hashkey].Add(spawnedActor);
-    				HashMap->AddActor(spawnedActor);
-    			}
+    				
+    					//HashMap->AddActor(spawnedActor);
+    				
+    			
     				
     		}
     	}

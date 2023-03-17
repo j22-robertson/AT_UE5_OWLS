@@ -8,7 +8,7 @@
 
 USpatialHashMap::USpatialHashMap()
 {
-	inverseWorldToGrid = 0.0003125;//1.0/(100.0/32.0);
+	//inverseWorldToGrid = 0.0003125;//1.0/(100.0/32.0);
 }
 
 TArray<AActor*> USpatialHashMap::GetActorsInCell(const FVector& Position) const
@@ -22,7 +22,7 @@ void USpatialHashMap::AddActor(AActor* Actor)
 {
 	
 	const FVector& ActorPosition = Actor->GetActorLocation();
-	FIntVector2 hashkey = FIntVector2((int32)ActorPosition.X* 0.0003125,(int32)ActorPosition.Y* 0.0003125);
+	FIntVector2 hashkey = FIntVector2(static_cast<int32>(ActorPosition.X)* 0.0003125,static_cast<int32>(ActorPosition.Y)* 0.0003125);
 	
 	if(!GridCells.Contains(hashkey))
 	{
