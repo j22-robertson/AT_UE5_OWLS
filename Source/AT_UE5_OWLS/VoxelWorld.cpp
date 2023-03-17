@@ -12,8 +12,10 @@ AVoxelWorld::AVoxelWorld()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	//HashMap = CreateDefaultSubobject<USpatialHashMap>("SpatialHashMap");
-	HashMap = CreateDefaultSubobject<USpatialHashMap>("hashmap");
+	HashMap = FSpatialHashMap();
+
+	
+
 	//GridCells.;
 	invCellsize = 1/100/ChunkSize;
 }
@@ -40,18 +42,52 @@ void AVoxelWorld::BeginPlay()
     		{
     			
     			FIntVector2 hashkey(x,y);
-    			  GetWorld()->SpawnActor<AActor>(Chunk, FVector(x *ChunkSize * 100, y*ChunkSize*100,0), FRotator::ZeroRotator);
+    			 AActor* spawnedActor = GetWorld()->SpawnActor<AActor>(Chunk, FVector(x *ChunkSize * 100, y*ChunkSize*100,0), FRotator::ZeroRotator);
     			//GetWorld()->GetSubsystem<>()
-    				
-    				
-    					//HashMap->AddActor(spawnedActor);
-    				
-    			
-    				
+    				/*
+    			if(!GridCells.Contains(hashkey) && spawnedActor != nullptr)
+    			{
+    				GridCells.Add(hashkey, TArray<AActor*>());
+    			}
+    			GridCells[hashkey].Add(spawnedActor);*/
+    			HashMap.AddActor(*spawnedActor);
     		}
     	}
 
-	
+	for(int x = -DrawDistance; x <= DrawDistance; ++x)
+	{
+		for(int y = -DrawDistance; y <= DrawDistance; ++y)
+		{
+    		
+			//GetWorld()->GetSubsystem<>()
+			/*
+		if(!GridCells.Contains(hashkey) && spawnedActor != nullptr)
+		{
+			GridCells.Add(hashkey, TArray<AActor*>());
+		}
+		GridCells[hashkey].Add(spawnedActor);*/
+			auto it = HashMap.GetActorsInCellByIndex(x,y);
+			while(it)
+			{
+				AActor* bob = *it;
+				bob->SetHidden(true);
+				bob->SetActorEnableCollision(false);
+				bob->SetActorTickEnabled(false);
+
+				it++;
+			}
+			//AActor* = *it;
+			
+				/*
+			for(const auto& actor : HashMap.GetActorsInCellByIndex(x,y))
+			{
+				actor->SetHidden(true);
+				actor->SetActorEnableCollision(false);
+				actor->SetActorTickEnabled(false);
+			}*/
+			
+		}
+	}
 	//HashMap->GetActorsInCell(FVector(-3200,-3200,0));
 	//HashMap->GetActorsInCell(FVector{-3300,-3300,0});
 	

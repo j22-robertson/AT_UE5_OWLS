@@ -10,7 +10,7 @@
 
 
 
-class USpatialHashMap;
+struct FSpatialHashMap;
 UCLASS()
 class AT_UE5_OWLS_API AVoxelWorld : public AActor
 {
@@ -33,7 +33,7 @@ public:
 	void AddActor(AActor* Actor);
 	//void RemoveActor(AActor* Actor);
 	//TArray<AActor*> GetActorsInCell(const FVector& Position) const;
-	TObjectPtr<USpatialHashMap> HashMap;
+	FSpatialHashMap HashMap;
 	TMap<FIntVector2, TArray<AActor*>> GridCells;
 protected:
 	// Called when the game starts or when spawned

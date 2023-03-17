@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+
 
 #include "SpatialHashMap.generated.h"
 
@@ -11,17 +11,15 @@
  * 
  */
 
-UCLASS()
-class AT_UE5_OWLS_API USpatialHashMap : public UObject
+USTRUCT()
+struct FSpatialHashMap
 {
 	GENERATED_BODY()
 public:
-
-	USpatialHashMap();
+	FSpatialHashMap() = default;
 	TArray<AActor*> GetActorsInCell(const FVector& Position) const;
-
-	
-	void AddActor(AActor* Actor);
+	TArray<AActor*>::TConstIterator GetActorsInCellByIndex(uint32 x, uint32 y) const;
+	void AddActor(AActor& Actor);
 	void RemoveActor(AActor* Actor);
 
 	TMap<FIntVector2, TArray<AActor*>> GridCells;
