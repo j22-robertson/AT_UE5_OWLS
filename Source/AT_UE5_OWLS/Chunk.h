@@ -9,7 +9,7 @@
 
 class UProceduralMeshComponent;
 class FastNoiseLite;
-enum class BlockType : uint8;
+enum class EBlockType : uint8;
 UCLASS()
 class AT_UE5_OWLS_API AChunk : public AActor
 {
@@ -41,7 +41,7 @@ private:
 	TArray<int> triangleData;
 	TArray<FVector2d> UVData;
 
-	TArray<BlockType> Blocks;
+	TArray<EBlockType> Blocks;
 
 	int vertexCount = 0;
 

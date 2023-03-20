@@ -16,7 +16,7 @@ struct FSpatialHashMap
 {
 	GENERATED_BODY()
 public:
-	FSpatialHashMap() = default;
+	FSpatialHashMap();
 	TArray<AActor*> GetActorsInCell(const FVector& Position) const;
 	TArray<AActor*>::TConstIterator GetActorsInCellByIndex(uint32 x, uint32 y) const;
 	void AddActor(AActor& Actor);

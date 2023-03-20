@@ -5,12 +5,12 @@
 
 
 
-/*
-USpatialHashMap::USpatialHashMap()
+
+FSpatialHashMap::FSpatialHashMap()
 {
-	GridCells = TMap<FIntVector2, TArray<AActor*>>();
-	//inverseWorldToGrid = 0.0003125;//1.0/(100.0/32.0);
-}*/
+	//GridCells = TMap<FIntVector2, TArray<AActor*>>();
+	inverseWorldToGrid = 1.0/100/32;
+}
 
 TArray<AActor*> FSpatialHashMap::GetActorsInCell(const FVector& Position) const
 {
@@ -35,7 +35,7 @@ void FSpatialHashMap::AddActor(AActor& Actor)
 	const FVector& ActorPosition = Actor.GetActorLocation();
 	//GetTypeHash(ActorPosition);
 	
-	const FIntVector2& key = FIntVector2(static_cast<int32>(ActorPosition.X* 0.0003125)+5,static_cast<int32>(ActorPosition.Y* 0.0003125)+5);
+	const FIntVector2& key = FIntVector2(static_cast<int32>(ActorPosition.X* inverseWorldToGrid)+5,static_cast<int32>(ActorPosition.Y* inverseWorldToGrid)+5);
 	uint32 hashkey = GetTypeHash(key);
 
 	

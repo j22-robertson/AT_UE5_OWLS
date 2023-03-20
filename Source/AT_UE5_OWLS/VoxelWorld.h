@@ -19,8 +19,8 @@ class AT_UE5_OWLS_API AVoxelWorld : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AVoxelWorld();
-	DECLARE_EVENT_OneParam(AVoxelWorld, FObjectHashedEvent, const AActor*);
-	FObjectHashedEvent& OnObjectAddedEvent(){return ObjectHashedEvent;}
+	//DECLARE_EVENT_OneParam(AVoxelWorld, FObjectHashedEvent, const AActor*);
+	//FObjectHashedEvent& OnObjectAddedEvent(){return ObjectHashedEvent;}
 	UPROPERTY(EditAnywhere, Category="Chunk World")
 	TSubclassOf<AActor> Chunk;
 
@@ -51,5 +51,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	private:
-	FObjectHashedEvent ObjectHashedEvent;
+	//FObjectHashedEvent ObjectHashedEvent;
 };

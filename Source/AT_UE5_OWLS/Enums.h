@@ -10,7 +10,11 @@ enum class EDirection : uint8
 };
 
 UENUM(BlueprintType)
-enum class BlockType : uint8
+enum class EBlockType : uint8
 {
-	Null, Air, Stone, Dirt, Grass
+	Null,
+	Air,
+	Stone,
+	Dirt
+	, Grass
 };

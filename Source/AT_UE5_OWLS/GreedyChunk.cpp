@@ -3,7 +3,9 @@
 
 #include "GreedyChunk.h"
 #include "FastNoiseLite.h"
+#include "VoxelWorldInstance.h"
 #include "ProceduralMeshComponent/Public/ProceduralMeshComponent.h"
+
 
 // Sets default values
 AGreedyChunk::AGreedyChunk()
@@ -13,8 +15,11 @@ AGreedyChunk::AGreedyChunk()
 	RootComponent = GetRootComponent();
 	SetRootComponent(RootComponent);
 	//blocks = new TArray<BlockType>();
-	MeshData = FChunkMeshData();
+	MeshData=  new FChunkMeshData();
+	
+	
 	PrimaryActorTick.bCanEverTick = false;
+	Blocks = TArray<EBlockType>();
 	Blocks.SetNum(size.X * size.Y * size.Z);
 	Noise = new FastNoiseLite();
 	ToBinary.Empty();
@@ -39,57 +44,64 @@ void AGreedyChunk::BeginPlay()
 
 	if (!FFileHelper::LoadFileToArray(BinaryArray, *filepath))
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to load data from file: %s"), *filepath);
+		//UE_LOG(LogTemp, Error, TEXT("Failed to load data from file: %s"), *filepath);
 		GenerateBlocks();
 		GenerateMesh();
 		
 	}
 	else
 	{
-
-	
-		UE_LOG(LogTemp, Error, TEXT(" load data from file: %s"), *filepath);
-		FMemoryReader FromBinary = FMemoryReader(BinaryArray, true);
+		//UE_LOG(LogTemp, Error, TEXT(" load data from file: %s"), *filepath);
+		FMemoryReader FromBinary = FMemoryReader(BinaryArray, false);
 		FromBinary.Seek(0);
-
-		FChunkMeshData SaveMeshData;
 		
-		FromBinary << SaveMeshData;
+		check(MeshData)
+		{
+			FromBinary << *MeshData;
+			
+			FromBinary << Blocks;
+		}
 		
-		FromBinary << Blocks;
+		
+		
 		// true, free data after done
 		//FMemoryWriter
 		//Tob-
-		MeshData = SaveMeshData;
+	
 		//FBufferArchive myData(BinaryArray);
 		//FromBinary.Seek(0);
 		//MeshData FromBinary;
 		//FromBinary <<MeshData;
 		
 		FromBinary.FlushCache();
+		FromBinary.Close();
 	}
-	if(!MeshData.Vertices.IsEmpty())
+	
+	if(MeshData)
 	{
-			ToBinary << MeshData;
-        	ToBinary << Blocks;
+		ToBinary.Seek(0);
+		
+		ToBinary << *MeshData;
+		ToBinary << Blocks;
 	}
 
 	///FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
 	if (FFileHelper::SaveArrayToFile(ToBinary, *filepath))
 	{
 		
-		UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
+		//UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to save data to file: %s"), *filepath);
+		//UE_LOG(LogTemp, Error, TEXT("Failed to save data to file: %s"), *filepath);
 	}
 	ToBinary.FlushCache();
 	ToBinary.Empty();
 	
 	ApplyMesh();
 
-	
+	const auto& temp = Cast<UVoxelWorldInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	temp->Register(this);
 
 	// Deserialize the binary data into a FMemoryReader instance
 	//FMemoryReader MemoryReader(BinaryArray, true); // true to free the buffer after done
@@ -104,11 +116,11 @@ void AGreedyChunk::BeginPlay()
 	//archive << this->blocks;
 	//archive << this->scale;
 	//archive << this->size;
-	
+
 	
 }
 
-void AGreedyChunk::EditChunk(const FIntVector position, const BlockType block)
+void AGreedyChunk::EditChunk(const FIntVector& position, const EBlockType& block)
 {
 	if(position.X > size.X || position.X <0||position.Y > size.Y || position.Y <0||position.Z > size.Z || position.Z <0)
 	{
@@ -120,11 +132,11 @@ void AGreedyChunk::EditChunk(const FIntVector position, const BlockType block)
 	ApplyMesh();
 
 	FBufferArchive NewToBinary;
-	NewToBinary << MeshData;
+	NewToBinary << *MeshData;
 	NewToBinary << Blocks;
 	
 	FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
-	if (MeshData.Vertices.IsEmpty() && FFileHelper::SaveArrayToFile(NewToBinary, *filepath))
+	if ( FFileHelper::SaveArrayToFile(NewToBinary, *filepath))
 	{
 		
 		UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
@@ -140,10 +152,10 @@ void AGreedyChunk::EditChunk(const FIntVector position, const BlockType block)
 void AGreedyChunk::ClearMesh()
 {
 	vertcount = 0;
-	MeshData.Clear();
+	MeshData->Clear();
 }
 
-void AGreedyChunk::EditChunkMesh(const FIntVector position, BlockType block)
+void AGreedyChunk::EditChunkMesh(const FIntVector& position, const EBlockType& block)
 {
 	const int index = GetBlockIndex(position.X,position.Y,position.Z);
 	Blocks[index] = block;
@@ -172,12 +184,12 @@ void AGreedyChunk::GenerateBlocks()
 
 			for (int z = 0; z < Height; z++)
 			{
-				Blocks[GetBlockIndex(x,y,z)] = BlockType::Stone;
+				Blocks[GetBlockIndex(x,y,z)] = EBlockType::Stone;
 			}
 
 			for (int z = Height; z < size.Z; z++)
 			{
-				Blocks[GetBlockIndex(x,y,z)] = BlockType::Air;
+				Blocks[GetBlockIndex(x,y,z)] = EBlockType::Air;
 			}
 
 		}
@@ -220,12 +232,12 @@ void AGreedyChunk::GenerateMesh()
 					const auto CurrentBlock = GetBlock(ChunkItr);
 					const auto CompareBlock = GetBlock(ChunkItr + AxisMask);
 
-					const bool CurrentBlockOpaque = CurrentBlock != BlockType::Air;
-					const bool CompareBlockOpaque = CompareBlock != BlockType::Air;
+					const bool CurrentBlockOpaque = CurrentBlock != EBlockType::Air;
+					const bool CompareBlockOpaque = CompareBlock != EBlockType::Air;
 
 					if (CurrentBlockOpaque == CompareBlockOpaque)
 					{
-						Mask[N++] = FMask { BlockType::Null, 0 };
+						Mask[N++] = FMask { EBlockType::Null, 0 };
 					}
 					else if (CurrentBlockOpaque)
 					{
@@ -293,7 +305,7 @@ void AGreedyChunk::GenerateMesh()
 						{
 							for (int k = 0; k < Width; ++k)
 							{
-								Mask[N + k + l * Axis1Limit] = FMask { BlockType::Null, 0 };
+								Mask[N + k + l * Axis1Limit] = FMask { EBlockType::Null, 0 };
 							}
 						}
 
@@ -313,33 +325,33 @@ void AGreedyChunk::GenerateMesh()
 
 void AGreedyChunk::ApplyMesh() const
 {
-	Mesh->CreateMeshSection(0, MeshData.Vertices, MeshData.Triangles, MeshData.Normals, MeshData.UV0, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
+	Mesh->CreateMeshSection(0, MeshData->Vertices, MeshData->Triangles, MeshData->Normals, MeshData->UV0, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
 }
 void AGreedyChunk::CreateQuad(FMask Mask, FIntVector AxisMask, FIntVector V1, FIntVector V2, FIntVector V3, FIntVector V4)
 {
 	const auto Normal = FVector(AxisMask * Mask.Normal);
 
-	MeshData.Vertices.Add(FVector(V1) * 100);
-	MeshData.Vertices.Add(FVector(V2) * 100);
-	MeshData.Vertices.Add(FVector(V3) * 100);
-	MeshData.Vertices.Add(FVector(V4) * 100);
+	MeshData->Vertices.Add(FVector(V1) * 100);
+	MeshData->Vertices.Add(FVector(V2) * 100);
+	MeshData->Vertices.Add(FVector(V3) * 100);
+	MeshData->Vertices.Add(FVector(V4) * 100);
 
-	MeshData.Triangles.Add(vertcount);
-	MeshData.Triangles.Add(vertcount + 2 + Mask.Normal);
-	MeshData.Triangles.Add(vertcount + 2 - Mask.Normal);
-	MeshData.Triangles.Add(vertcount + 3);
-	MeshData.Triangles.Add(vertcount + 1 - Mask.Normal);
-	MeshData.Triangles.Add(vertcount + 1 + Mask.Normal);
+	MeshData->Triangles.Add(vertcount);
+	MeshData->Triangles.Add(vertcount + 2 + Mask.Normal);
+	MeshData->Triangles.Add(vertcount + 2 - Mask.Normal);
+	MeshData->Triangles.Add(vertcount + 3);
+	MeshData->Triangles.Add(vertcount + 1 - Mask.Normal);
+	MeshData->Triangles.Add(vertcount + 1 + Mask.Normal);
 
-	MeshData.UV0.Add(FVector2D(0,0));
-	MeshData.UV0.Add(FVector2D(0,1));
-	MeshData.UV0.Add(FVector2D(1,0));
-	MeshData.UV0.Add(FVector2D(1,1));
+	MeshData->UV0.Add(FVector2D(0,0));
+	MeshData->UV0.Add(FVector2D(0,1));
+	MeshData->UV0.Add(FVector2D(1,0));
+	MeshData->UV0.Add(FVector2D(1,1));
 
-	MeshData.Normals.Add(Normal);
-	MeshData.Normals.Add(Normal);
-	MeshData.Normals.Add(Normal);
-	MeshData.Normals.Add(Normal);
+	MeshData->Normals.Add(Normal);
+	MeshData->Normals.Add(Normal);
+	MeshData->Normals.Add(Normal);
+	MeshData->Normals.Add(Normal);
 	vertcount += 4;
 }
 
@@ -348,10 +360,10 @@ int AGreedyChunk::GetBlockIndex(const int X, const int Y, const int Z) const
 	return Z * size.X * size.Y + Y * size.X + X;
 }
 
-BlockType AGreedyChunk::GetBlock(const FIntVector Index) const
+EBlockType AGreedyChunk::GetBlock(const FIntVector Index) const
 {
 	if (Index.X >= size.X || Index.Y >= size.Y || Index.Z >= size.Z || Index.X < 0 || Index.Y < 0 || Index.Z < 0)
-		return BlockType::Air;
+		return EBlockType::Air;
 	return Blocks[GetBlockIndex(Index.X, Index.Y, Index.Z)];
 }
 

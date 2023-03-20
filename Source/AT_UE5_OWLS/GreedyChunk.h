@@ -6,13 +6,14 @@
 #include "GameFramework/Actor.h"
 #include "Enums.h"
 #include "Public/ChunkMeshData.h"
+#include "Kismet/GameplayStatics.h"
 #include "GreedyChunk.generated.h"
 
 
 class UProceduralMeshComponent;
 class FastNoiseLite;
 struct FChunkMeshData;
-enum class BlockType : uint8;
+enum class EBlockType : uint8;
 
 UCLASS()
 class AT_UE5_OWLS_API AGreedyChunk : public AActor
@@ -20,7 +21,7 @@ class AT_UE5_OWLS_API AGreedyChunk : public AActor
 	GENERATED_BODY()
 	struct FMask
 	{
-		BlockType Block;
+		EBlockType Block;
 		int Normal;
 	};
 	FBufferArchive ToBinary;
@@ -37,21 +38,22 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
 	UFUNCTION(BlueprintCallable, Category="GreedyChunk")
-	void EditChunk(const FIntVector position, const BlockType block);
+	void EditChunk(const FIntVector& position, const EBlockType& block);
 	
 	void ClearMesh();
-	void EditChunkMesh(const FIntVector position,BlockType block);
+	void EditChunkMesh(const FIntVector& position,const EBlockType& block);
 	
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-UPROPERTY()
-	TArray<BlockType> Blocks;
+	UPROPERTY()
+	TArray<EBlockType> Blocks;
 	
-	FChunkMeshData MeshData;
+	FChunkMeshData* MeshData;
 protected:
 	
 private:
@@ -78,7 +80,7 @@ private:
 
 	void CreateQuad(FMask Mask, FIntVector AxisMask, FIntVector V1, FIntVector V2, FIntVector V3, FIntVector V4);
 
-	BlockType GetBlock(FIntVector Index) const;
+	EBlockType GetBlock(FIntVector Index) const;
 
 	bool CompareMask(FMask M1, FMask M2) const;
 };

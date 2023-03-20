@@ -63,11 +63,11 @@ void AChunk::GenerateBlocks()
 			
 			for (int z = 0; z < Height;++z)
 			{
-				Blocks[GetBlockIndex(x,y,z)] = BlockType::Stone;
+				Blocks[GetBlockIndex(x,y,z)] = EBlockType::Stone;
 			}
 			for (int z = Height; z < size; ++z)
 			{
-				Blocks[GetBlockIndex(x,y,z)] = BlockType::Air;
+				Blocks[GetBlockIndex(x,y,z)] = EBlockType::Air;
 			}
 		}
 	}
@@ -83,7 +83,7 @@ void AChunk::GenerateMesh()
 		{
 			for (int z = 0; z < size;++z)
 			{
-				if(Blocks[GetBlockIndex(x,y,z)] != BlockType::Air)
+				if(Blocks[GetBlockIndex(x,y,z)] != EBlockType::Air)
 				{
 					const auto Position = FVector(x,y,z);
 					for(auto Direction : {EDirection::Forward, EDirection::Right, EDirection::Back, EDirection::Left, EDirection::Up, EDirection::Down})
@@ -113,7 +113,7 @@ bool AChunk::Check(FVector Position) const
 	{
 		return true;
 	}
-	return Blocks[GetBlockIndex(Position.X,Position.Y,Position.Z)] == BlockType::Air;
+	return Blocks[GetBlockIndex(Position.X,Position.Y,Position.Z)] == EBlockType::Air;
 }
 
 void AChunk::CreateFace(EDirection Direction, FVector Position)

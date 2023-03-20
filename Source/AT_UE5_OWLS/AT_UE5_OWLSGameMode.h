@@ -18,11 +18,12 @@ public:
 
 	void WriteSave();
 	
-
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Category="Chunk World")
+	TSubclassOf<AActor> Chunk;
+	UPROPERTY(EditAnywhere)
 	int DrawDistance = 5;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	int ChunkSize = 32;
 //	UPROPERTY()
 	//USaveGame* SaveGame;

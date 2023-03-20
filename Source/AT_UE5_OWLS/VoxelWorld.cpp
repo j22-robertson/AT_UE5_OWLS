@@ -4,7 +4,7 @@
 #include "VoxelWorld.h"
 
 
-
+#include "GreedyChunk.h"
 #include "Engine/World.h"
 
 // Sets default values
@@ -41,8 +41,8 @@ void AVoxelWorld::BeginPlay()
     		for(int y = -DrawDistance; y <= DrawDistance; ++y)
     		{
     			
-    			FIntVector2 hashkey(x,y);
-    			 AActor* spawnedActor = GetWorld()->SpawnActor<AActor>(Chunk, FVector(x *ChunkSize * 100, y*ChunkSize*100,0), FRotator::ZeroRotator);
+    			//FIntVector2 hashkey(x,y);
+    			 GetWorld()->SpawnActor<AActor>(Chunk, FVector(x *ChunkSize * 100, y*ChunkSize*100,0), FRotator::ZeroRotator);
     			//GetWorld()->GetSubsystem<>()
     				/*
     			if(!GridCells.Contains(hashkey) && spawnedActor != nullptr)
@@ -50,7 +50,7 @@ void AVoxelWorld::BeginPlay()
     				GridCells.Add(hashkey, TArray<AActor*>());
     			}
     			GridCells[hashkey].Add(spawnedActor);*/
-    			HashMap.AddActor(*spawnedActor);
+    			//HashMap.AddActor(*spawnedActor);
     		}
     	}
 
@@ -66,16 +66,20 @@ void AVoxelWorld::BeginPlay()
 			GridCells.Add(hashkey, TArray<AActor*>());
 		}
 		GridCells[hashkey].Add(spawnedActor);*/
+			/*
 			auto it = HashMap.GetActorsInCellByIndex(x,y);
 			while(it)
 			{
 				AActor* bob = *it;
-				bob->SetHidden(true);
-				bob->SetActorEnableCollision(false);
-				bob->SetActorTickEnabled(false);
-
+				if(!bob->IsA<AGreedyChunk>())
+				{
+					bob->SetHidden(true);
+					bob->SetActorEnableCollision(false);
+					bob->SetActorTickEnabled(false);
+				}
+				
 				it++;
-			}
+			}*/
 			//AActor* = *it;
 			
 				/*
