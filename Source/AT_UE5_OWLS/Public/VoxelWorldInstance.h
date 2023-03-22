@@ -35,6 +35,7 @@ class AT_UE5_OWLS_API UVoxelWorldInstance : public UGameInstance
 	int DrawScale;
 	UPROPERTY(EditAnywhere)
 	FText WorldName;
+	int MaxDepth;
 	
 	Node* root;
 	
@@ -49,4 +50,6 @@ public:
 	
 	void Register(AActor* actor);
 	void Subdivide(Node& node);
+	void SubdivMaxTest(Node& node);
+	bool Intersects(Node& node, FVector position, float area);
 };

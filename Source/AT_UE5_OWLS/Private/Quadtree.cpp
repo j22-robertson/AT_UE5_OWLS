@@ -29,14 +29,7 @@ void FQuadtree::Subdivide(Node& node)
 	
 	int child_depth = node.depth +1;
 	int child_bounds = node.bounds/2;
-	while(child_bounds%ChunkSize != 0)
-	{
-		child_bounds+=1;
-		if(child_bounds == ChunkSize)
-		{
-			
-		}
-	}
+
 
 	// -1,+1,
 	//+1,+1,
@@ -45,21 +38,21 @@ void FQuadtree::Subdivide(Node& node)
 	if(node.children.IsEmpty())
 	{
 		FVector3f child_position = node.position;
-		node.children.Emplace( new Node{FVector3f{child_position.X-child_bounds,child_position.Y+child_bounds,child_position.Z}
+		node.children.Emplace( new Node{FVector3f{child_position.X-child_bounds* ChunkSize,child_position.Y+child_bounds * ChunkSize,child_position.Z}
 			, child_bounds,
 			TArray<AActor*>(), child_depth,
 		});
-		node.children.Emplace( new Node{FVector3f{child_position.X+child_bounds,child_position.Y+child_bounds,child_position.Z}
+		node.children.Emplace( new Node{FVector3f{child_position.X+child_bounds *ChunkSize,child_position.Y+child_bounds * ChunkSize,child_position.Z}
 			, child_bounds,
 			TArray<AActor*>(),
 			child_depth,
 		});
-		node.children.Emplace( new Node{FVector3f{child_position.X+child_bounds,child_position.Y-child_bounds,child_position.Z},
+		node.children.Emplace( new Node{FVector3f{child_position.X+child_bounds * ChunkSize,child_position.Y-child_bounds * ChunkSize,child_position.Z},
 			child_bounds,
 			TArray<AActor*>(),
 			child_depth,
 		});
-		node.children.Emplace( new Node{FVector3f{child_position.X-child_bounds,child_position.Y-child_bounds,child_position.Z}
+		node.children.Emplace( new Node{FVector3f{child_position.X-child_bounds* ChunkSize,child_position.Y-child_bounds * ChunkSize,child_position.Z}
 			, child_bounds,
 			TArray<AActor*>(),
 			child_depth,
