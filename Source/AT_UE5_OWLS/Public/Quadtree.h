@@ -4,29 +4,44 @@
 
 #include "CoreMinimal.h"
 
+
 /**
  * 
  */
  struct Node
  {
+ 	
  	FVector3f position;
-	FVector2D bounds;
- 	TArray<TObjectPtr<UObject>> Objects;
- 	TObjectPtr<Node> children[4];
+	int bounds;
+ 	TArray<AActor*> Objects;
+ 	int depth;
+ 	TArray<Node*> children;
+ 	
  };
- 
-class AT_UE5_OWLS_API Quadtree
-{
-public:
-	Quadtree(FVector3f position, FVector2d bounds, int maxObjectsPerNode);
-	void Insert(UObject* Object);
-	TArray<TObjectPtr<UObject>> Query(FVector2d bounds);
-private:
 
-	TObjectPtr<Node> root;
-	int maxObjectsPerNode;
-	void Subdivide(TObjectPtr<Node> node);
-	TArray<UObject*> Query(TObjectPtr<Node> node, FVector2d bounds);
+
+struct AT_UE5_OWLS_API FQuadtree
+{
 	
-	~Quadtree();
+public:
+	void Subdivide(Node& node);
+	FQuadtree(FVector3f _position, int _bounds, int _maxObjectsPerNode, int _ChunkSize);
+	//void Insert(UObject* Object);
+	//TArray<AActor*> Query(TObjectPtr<Node> node, FVector2d bounds);
+	~FQuadtree();void TempSubdivFromGameInstance();
+private:
+	const int ChunkSize;
+	Node* root;
+	int maxObjectsPerNode;
+	
+	void LoadChunks(FVector actorposition, Node& node);
+	bool Contains(FVector actorposition, Node& node);
+	void Insert(Node& node, AActor* actor);
+	bool Intersects(Node& node, FVector position, float area);
+	TArray<AActor*> Query(Node& node, FVector position, float area);
+	
+	int MaxDepth;
+
+
+	
 };
