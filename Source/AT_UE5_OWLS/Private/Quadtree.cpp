@@ -135,10 +135,6 @@ TArray<AActor*> FQuadtree::Query(Node& node, FVector position, float area)
 		result += Query(*child, position, area);
 	}
 	return result;
-
-	
-	
-	
 }
 
 void FQuadtree::TempSubdivFromGameInstance()

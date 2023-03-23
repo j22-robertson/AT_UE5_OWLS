@@ -100,8 +100,8 @@ void AGreedyChunk::BeginPlay()
 	
 	ApplyMesh();
 
-	const auto& temp = Cast<UVoxelWorldInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	temp->Register(this);
+	//const auto& temp = Cast<UVoxelWorldInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	//temp->Register(this);
 
 	// Deserialize the binary data into a FMemoryReader instance
 	//FMemoryReader MemoryReader(BinaryArray, true); // true to free the buffer after done
@@ -116,8 +116,6 @@ void AGreedyChunk::BeginPlay()
 	//archive << this->blocks;
 	//archive << this->scale;
 	//archive << this->size;
-
-	
 }
 
 void AGreedyChunk::EditChunk(const FIntVector& position, const EBlockType& block)
@@ -171,7 +169,7 @@ void AGreedyChunk::Tick(float DeltaTime)
 
 void AGreedyChunk::GenerateBlocks()
 {
-	const auto Location = GetActorLocation();
+	const auto& Location = GetActorLocation();
 
 	for (int x = 0; x < size.X; x++)
 	{
