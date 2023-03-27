@@ -18,7 +18,7 @@ class AT_UE5_OWLS_API UVoxelWorldInstance : public UGameInstance
 	GENERATED_BODY()
 	UVoxelWorldInstance();
 	//FSpatialHashMap hashmap;
-
+	
 
 	UFUNCTION(BlueprintCallable)
 	void PrintStuff(int num);
@@ -30,6 +30,7 @@ class AT_UE5_OWLS_API UVoxelWorldInstance : public UGameInstance
 	void QueryAndUnrender(FVector position, float area);
 	
 	void QueryChunksToLoad(Node& node, FVector posittion, const float& area);
+	void LoadChunk(Node& node) const;
 
 	UFUNCTION(BlueprintCallable)
 	void LoadChunks();
@@ -41,8 +42,15 @@ class AT_UE5_OWLS_API UVoxelWorldInstance : public UGameInstance
 
 	TSet<Node*> ChunksLoaded;
 
-	TArray<AActor*> Query(Node& node, FVector position, float area);
+	TSet<Node*> CurrentLoaded;
+
+	TArray<Node*> PreviousLoaded;
+	TArray<Node*> Loaded;
 	
+
+	TArray<AActor*> Query(Node& node, FVector position, float area);
+	void SaveLoadWorld();
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> Chunk;
 	UPROPERTY(EditAnywhere)
@@ -50,8 +58,9 @@ class AT_UE5_OWLS_API UVoxelWorldInstance : public UGameInstance
 	UPROPERTY(EditAnywhere)
 	int DrawScale;
 	UPROPERTY(EditAnywhere)
-	FText WorldName;
+	FString WorldName;
 	int MaxDepth;
+	
 	
 	Node* root;
 	
@@ -61,6 +70,7 @@ class AT_UE5_OWLS_API UVoxelWorldInstance : public UGameInstance
 
 	
 public:
+	FString GameDirectory;
 	void LoadData();
 	
 	
@@ -68,5 +78,7 @@ public:
 	void Subdivide(Node& node);
 	void SubdivMaxTest(Node& node);
 	bool Intersects(Node& node, FVector position, float area);
+
+	
 	void QueryChunksToLoad();
 };

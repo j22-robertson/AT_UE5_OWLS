@@ -2,6 +2,9 @@
 
 
 #include "GreedyChunk.h"
+
+#include <string>
+
 #include "FastNoiseLite.h"
 #include "VoxelWorldInstance.h"
 #include "ProceduralMeshComponent/Public/ProceduralMeshComponent.h"
@@ -37,21 +40,53 @@ void AGreedyChunk::BeginPlay()
 	Noise->SetFrequency(0.03);
 	Noise->SetNoiseType(FastNoiseLite::NoiseType_Perlin);
 	Noise->SetFractalType(FastNoiseLite::FractalType_FBm);
+	FIntVector result;
+	const int factor =size.X*100;
+	const FIntVector iposition = FIntVector(this->GetActorLocation());
+	const FIntVector iScaledPosition =FIntVector(this->GetActorLocation()/factor);
+	if(iposition.X < 0)
+	{
+		result.X=iScaledPosition.X-1;
+	}
+	else
+	{
+		result.X = iScaledPosition.X;
+	}
+	if(iposition.Y < 0)
+	{
+		result.Y=iScaledPosition.Y-1;
+	}
+	else
+	{
+		result.Y = iScaledPosition.Y;
+	}
+	if(iposition.Z < 0)
+	{
+		result.Z=iScaledPosition.Z-1;
+	}
+	else
+	{
+		result.Z = iScaledPosition.Z;
+	}
 
-	FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
+
+	
+	
+
+	filepath  = GetWorld()->GetGameInstance<UVoxelWorldInstance>()->GameDirectory+"/" +this->GetName()+"X" +FString::FromInt(result.X)+"Y"+FString::FromInt(result.Y)+".bin";
 	TArray<uint8> BinaryArray;
 	
 
 	if (!FFileHelper::LoadFileToArray(BinaryArray, *filepath))
 	{
-		//UE_LOG(LogTemp, Error, TEXT("Failed to load data from file: %s"), *filepath);
+		UE_LOG(LogTemp, Error, TEXT("Failed to load data from file: %s"), *filepath);
 		GenerateBlocks();
 		GenerateMesh();
 		
 	}
 	else
 	{
-		//UE_LOG(LogTemp, Error, TEXT(" load data from file: %s"), *filepath);
+		UE_LOG(LogTemp, Error, TEXT(" load data from file: %s"), *filepath);
 		FMemoryReader FromBinary = FMemoryReader(BinaryArray, false);
 		FromBinary.Seek(0);
 		
@@ -89,11 +124,11 @@ void AGreedyChunk::BeginPlay()
 	if (FFileHelper::SaveArrayToFile(ToBinary, *filepath))
 	{
 		
-		//UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
+		UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
 	}
 	else
 	{
-		//UE_LOG(LogTemp, Error, TEXT("Failed to save data to file: %s"), *filepath);
+		UE_LOG(LogTemp, Error, TEXT("Failed to save data to file: %s"), *filepath);
 	}
 	ToBinary.FlushCache();
 	ToBinary.Empty();
@@ -133,7 +168,7 @@ void AGreedyChunk::EditChunk(const FIntVector& position, const EBlockType& block
 	NewToBinary << *MeshData;
 	NewToBinary << Blocks;
 	
-	FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
+	
 	if ( FFileHelper::SaveArrayToFile(NewToBinary, *filepath))
 	{
 		

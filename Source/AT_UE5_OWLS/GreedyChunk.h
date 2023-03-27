@@ -49,6 +49,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	FString filepath;
 	
 	UPROPERTY()
 	TArray<EBlockType> Blocks;

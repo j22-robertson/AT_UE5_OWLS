@@ -10,13 +10,12 @@
  */
  struct Node
  {
- 	
  	FVector3f position;
 	int bounds;
+ 	
  	TArray<AActor*> Objects;
  	int depth;
  	TArray<Node*> children;
- 	
  };
 
 

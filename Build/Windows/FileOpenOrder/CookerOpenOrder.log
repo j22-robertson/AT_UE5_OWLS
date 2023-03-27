@@ -97,12 +97,12 @@
 "../../../Engine/Content/EditorLandscapeResources/SplineEditorMesh.ubulk" 96
 "../../../Engine/Content/EditorLandscapeResources/SplineEditorMesh.uasset" 97
 "../../../Engine/Content/EditorLandscapeResources/SplineEditorMesh.uexp" 98
-"../../../Engine/Content/EditorMeshes/EditorSphere.ubulk" 99
-"../../../Engine/Content/EditorMeshes/EditorSphere.uasset" 100
-"../../../Engine/Content/EditorMeshes/EditorSphere.uexp" 101
-"../../../Engine/Content/EditorResources/S_Solver.ubulk" 102
-"../../../Engine/Content/EditorResources/S_Solver.uasset" 103
-"../../../Engine/Content/EditorResources/S_Solver.uexp" 104
+"../../../Engine/Content/EditorResources/S_Solver.ubulk" 99
+"../../../Engine/Content/EditorResources/S_Solver.uasset" 100
+"../../../Engine/Content/EditorResources/S_Solver.uexp" 101
+"../../../Engine/Content/EditorMeshes/EditorSphere.ubulk" 102
+"../../../Engine/Content/EditorMeshes/EditorSphere.uasset" 103
+"../../../Engine/Content/EditorMeshes/EditorSphere.uexp" 104
 "../../../Engine/Plugins/Media/MediaPlate/Content/SM_MediaPlateScreen.ubulk" 105
 "../../../Engine/Plugins/Media/MediaPlate/Content/SM_MediaPlateScreen.uasset" 106
 "../../../Engine/Plugins/Media/MediaPlate/Content/SM_MediaPlateScreen.uexp" 107
@@ -876,44 +876,48 @@
 "../../../Engine/Plugins/Interchange/Runtime/Content/Pipelines/DefaultAssetsPipeline.uexp" 875
 "../../../Engine/Plugins/Runtime/MeshModelingToolset/Content/Materials/M_DynamicMeshComponentVtxColor.uasset" 876
 "../../../Engine/Plugins/Runtime/MeshModelingToolset/Content/Materials/M_DynamicMeshComponentVtxColor.uexp" 877
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/MyGreedyChunk.uasset" 878
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/MyGreedyChunk.uexp" 879
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_MSR_MSK.ubulk" 880
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_MSR_MSK.uasset" 881
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_MSR_MSK.uexp" 882
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_CCRCCPlastic_MSK.ubulk" 883
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_CCRCCPlastic_MSK.uasset" 884
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_CCRCCPlastic_MSK.uexp" 885
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_Tan.ubulk" 886
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_Tan.uasset" 887
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_Tan.uexp" 888
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_N.ubulk" 889
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_N.uasset" 890
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_N.uexp" 891
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Materials/Instances/Manny/MI_Manny_01.uasset" 892
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Materials/Instances/Manny/MI_Manny_01.uexp" 893
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_BN.ubulk" 894
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_BN.uasset" 895
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_BN.uexp" 896
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_ASAOPMASK_MSK.ubulk" 897
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_ASAOPMASK_MSK.uasset" 898
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_ASAOPMASK_MSK.uexp" 899
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_D.ubulk" 900
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_D.uasset" 901
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_D.uexp" 902
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Materials/Instances/Manny/MI_Manny_02.uasset" 903
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Materials/Instances/Manny/MI_Manny_02.uexp" 904
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Meshes/SKM_Manny_Simple.uasset" 905
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Meshes/SKM_Manny_Simple.uexp" 906
-"../../../Engine/Plugins/Animation/ControlRig/Content/Controls/DefaultGizmoLibraryNormalized.uasset" 907
-"../../../Engine/Plugins/Animation/ControlRig/Content/Controls/DefaultGizmoLibraryNormalized.uexp" 908
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Rigs/CR_Mannequin_Body.uasset" 909
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Rigs/CR_Mannequin_Body.uexp" 910
-"../../../Engine/Content/Maps/Templates/HLODs/HLODLayer_Instanced.uasset" 911
-"../../../Engine/Content/Maps/Templates/HLODs/HLODLayer_Instanced.uexp" 912
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/ThirdPerson/Maps/ThirdPersonMap.uexp" 913
-"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/ThirdPerson/Maps/ThirdPersonMap.umap" 914
-"../../../Engine/Content/Maps/Entry_BuiltData.uasset" 915
-"../../../Engine/Content/Maps/Entry_BuiltData.uexp" 916
-"../../../Engine/Content/Maps/Entry.uexp" 917
-"../../../Engine/Content/Maps/Entry.umap" 918
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/TempBP.uasset" 878
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/TempBP.uexp" 879
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/MyGreedyChunk.uasset" 880
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/MyGreedyChunk.uexp" 881
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/MyVoxelWorldInstance.uasset" 882
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/MyVoxelWorldInstance.uexp" 883
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_MSR_MSK.ubulk" 884
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_MSR_MSK.uasset" 885
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_MSR_MSK.uexp" 886
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_CCRCCPlastic_MSK.ubulk" 887
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_CCRCCPlastic_MSK.uasset" 888
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_CCRCCPlastic_MSK.uexp" 889
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_Tan.ubulk" 890
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_Tan.uasset" 891
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_Tan.uexp" 892
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_N.ubulk" 893
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_N.uasset" 894
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_N.uexp" 895
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Materials/Instances/Manny/MI_Manny_01.uasset" 896
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Materials/Instances/Manny/MI_Manny_01.uexp" 897
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_BN.ubulk" 898
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_BN.uasset" 899
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_BN.uexp" 900
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_ASAOPMASK_MSK.ubulk" 901
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_ASAOPMASK_MSK.uasset" 902
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_ASAOPMASK_MSK.uexp" 903
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_D.ubulk" 904
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_D.uasset" 905
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Textures/Manny/T_Manny_02_D.uexp" 906
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Materials/Instances/Manny/MI_Manny_02.uasset" 907
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Materials/Instances/Manny/MI_Manny_02.uexp" 908
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Meshes/SKM_Manny_Simple.uasset" 909
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Meshes/SKM_Manny_Simple.uexp" 910
+"../../../Engine/Plugins/Animation/ControlRig/Content/Controls/DefaultGizmoLibraryNormalized.uasset" 911
+"../../../Engine/Plugins/Animation/ControlRig/Content/Controls/DefaultGizmoLibraryNormalized.uexp" 912
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Rigs/CR_Mannequin_Body.uasset" 913
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/Characters/Mannequins/Rigs/CR_Mannequin_Body.uexp" 914
+"../../../Engine/Content/Maps/Templates/HLODs/HLODLayer_Instanced.uasset" 915
+"../../../Engine/Content/Maps/Templates/HLODs/HLODLayer_Instanced.uexp" 916
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/ThirdPerson/Maps/ThirdPersonMap.uexp" 917
+"C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/Content/ThirdPerson/Maps/ThirdPersonMap.umap" 918
+"../../../Engine/Content/Maps/Entry_BuiltData.uasset" 919
+"../../../Engine/Content/Maps/Entry_BuiltData.uexp" 920
+"../../../Engine/Content/Maps/Entry.uexp" 921
+"../../../Engine/Content/Maps/Entry.umap" 922

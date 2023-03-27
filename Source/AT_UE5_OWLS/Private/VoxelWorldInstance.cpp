@@ -7,7 +7,7 @@ UVoxelWorldInstance::UVoxelWorldInstance()
 {
 
 	root = new Node;
-	root->bounds = 16;
+	root->bounds = 1024;
 	root->position = FVector3f{-(16*100*32)/2, -(16*100*32)/2,0};
 	root->depth = 0;
 	int i = 0;
@@ -19,6 +19,7 @@ UVoxelWorldInstance::UVoxelWorldInstance()
 	}
 	MaxDepth = i;
 	ChunkSize = 32;
+	
 
 	//SubdivMaxTest(*root);
 	// = i;
@@ -58,7 +59,20 @@ void UVoxelWorldInstance::UpdateChunksLoaded(const FVector3f& transform)
 void UVoxelWorldInstance::SpawnWorldTemp()
 {
 	
+	IPlatformFile& FileManager = FPlatformFileManager::Get().GetPlatformFile();
+	GameDirectory = FPaths::ProjectDir();
 	
+	GameDirectory+= WorldName;
+	if(FileManager.DirectoryExists(*GameDirectory))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("FilePaths: Directory Exists"));
+		
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("FilePaths: Directory Does not exist"));
+		FileManager.CreateDirectory(*GameDirectory);
+	}
 	/*
 	for(int x = -DrawScale; x < DrawScale; ++x)
 	{
@@ -189,7 +203,6 @@ bool UVoxelWorldInstance::Intersects(Node& node, FVector position, float area)
 }
 void UVoxelWorldInstance::QueryChunksToLoad(Node& node,FVector position, const float& area)
 {
-
 	
 	if(Intersects(node, position, area))
 	{
@@ -203,47 +216,54 @@ void UVoxelWorldInstance::QueryChunksToLoad(Node& node,FVector position, const f
 		}
 		else
 		{
-			if(!ChunksLoaded.Contains(&node))
-			{
-				ChunksToLoad.Enqueue(&node);
-			}
-			//node.Objects.Add(GetWorld()->SpawnActor<AGreedyChunk>(Chunk, FVector(node.position.X, node.position.Y,0), FRotator::ZeroRotator));
+			ChunksToLoad.Enqueue(&node);
 		}
 	}
-	
 }
-
+void UVoxelWorldInstance::LoadChunk(Node& node) const
+{
+	if(node.Objects.IsEmpty())
+	{
+		node.Objects.Add(GetWorld()->SpawnActor<AGreedyChunk>(Chunk, FVector(node.position.X, node.position.Y,0), FRotator::ZeroRotator));
+	}
+	else
+	{
+		for(auto& Actor : node.Objects)
+		{
+			Actor->SetHidden(false);
+		}
+	}
+}
 void UVoxelWorldInstance::LoadChunks()
 {
+	Loaded.Empty();
+	ChunksLoaded.Empty();
 	while (!ChunksToLoad.IsEmpty())
 	{
-		if (auto& node = *ChunksToLoad.Peek())
-		{
-			
-			node->Objects.Add(GetWorld()->SpawnActor<AGreedyChunk>(Chunk, FVector(node->position.X, node->position.Y,0), FRotator::ZeroRotator));
-			
-			ChunksLoaded.Add(node);
-			
-			ChunksToLoad.Pop();
-		}
-		
+		auto& node = *ChunksToLoad.Peek();
+		LoadChunk(*node);
+		Loaded.Add(node);
+		ChunksLoaded.Add(node);
+		ChunksToLoad.Pop();
 	}
 }
 
 void UVoxelWorldInstance::UnloadChunks(FVector position, float area)
 {
-	for(const auto node : ChunksLoaded)
+	for (auto& node : PreviousLoaded)
 	{
-		if(!Intersects(*node, position, area))
+		if(!ChunksLoaded.Contains(node))
 		{
-			for(const auto& actor: node->Objects)
+			for(auto& actor: node->Objects)
 			{
 				actor->SetHidden(true);
+				actor->Destroy();
+				//actor->SetActorEnableCollision(false);
 			}
-			ChunksLoaded.Remove(node);
+			node->Objects.Empty();
 		}
 	}
-	
+	PreviousLoaded = Loaded;
 }
 
 TArray<AActor*> UVoxelWorldInstance::Query(Node& node, FVector position, float area)
@@ -264,4 +284,21 @@ TArray<AActor*> UVoxelWorldInstance::Query(Node& node, FVector position, float a
 		result += Query(*child, position, area*100);
 	}
 	return result;
+}
+
+void UVoxelWorldInstance::SaveLoadWorld()
+{
+	/*
+	IPlatformFile& FileManager = FPlatformFileManager::Get().GetPlatformFile();
+	FString GameDirectory = FPaths::ProjectDir();
+	GameDirectory.Append(&WorldName);
+	if(FileManager.DirectoryExists(*GameDirectory))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("FilePaths: Directory Exists"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("FilePaths: Directory Does not exist"));
+		FileManager.CreateDirectory(*GameDirectory);
+	}*/
 }
