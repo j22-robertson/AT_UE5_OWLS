@@ -224,7 +224,10 @@ void UVoxelWorldInstance::LoadChunk(Node& node) const
 {
 	if(node.Objects.IsEmpty())
 	{
+		TArray<AActor* >barnacles = TArray<AActor*>();
+		
 		node.Objects.Add(GetWorld()->SpawnActor<AGreedyChunk>(Chunk, FVector(node.position.X, node.position.Y,0), FRotator::ZeroRotator));
+		barnacles.Add(*node.Objects.begin());
 	}
 	else
 	{
@@ -246,6 +249,50 @@ void UVoxelWorldInstance::LoadChunks()
 		ChunksLoaded.Add(node);
 		ChunksToLoad.Pop();
 	}
+}
+
+void UVoxelWorldInstance::LoadParallelChunks()
+{
+	Loaded.Empty();
+	ChunksLoaded.Empty();
+
+	TArray<Node*> ChunksToLoadArray;
+	TArray<AActor* >barnacles = TArray<AActor*>();
+	while (!ChunksToLoad.IsEmpty())
+	{
+		auto& node = *ChunksToLoad.Peek();
+		
+		if(node->Objects.IsEmpty())
+		{
+			node->Objects.Add(GetWorld()->SpawnActor<AGreedyChunk>(Chunk, FVector(node->position.X, node->position.Y,0), FRotator::ZeroRotator));
+			barnacles.Add(*node->Objects.begin());
+		}
+		else
+		{
+			for(auto& Actor : node->Objects)
+			{
+				Actor->SetHidden(false);
+			}
+		}
+		Loaded.Add(node);
+		ChunksLoaded.Add(node);
+		ChunksToLoadArray.Add(*ChunksToLoad.Peek());
+
+		
+		ChunksToLoad.Pop();
+	}
+
+	//FParallelForTask::FChunkedTaskResults Results;
+	FCriticalSection Mutex;
+	ParallelFor(
+		barnacles.Num(),
+		[&](int32 idx)
+		{
+			auto& node = *ChunksToLoadArray[idx];
+		
+		}
+
+	);
 }
 
 void UVoxelWorldInstance::UnloadChunks(FVector position, float area)

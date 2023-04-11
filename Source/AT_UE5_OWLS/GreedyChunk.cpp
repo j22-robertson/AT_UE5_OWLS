@@ -7,7 +7,10 @@
 
 #include "FastNoiseLite.h"
 #include "VoxelWorldInstance.h"
+
 #include "ProceduralMeshComponent/Public/ProceduralMeshComponent.h"
+#include "Serialization/ArchiveLoadCompressedProxy.h"
+#include "Serialization/ArchiveSaveCompressedProxy.h"
 
 
 // Sets default values
@@ -73,10 +76,11 @@ void AGreedyChunk::BeginPlay()
 	
 	
 
-	filepath  = GetWorld()->GetGameInstance<UVoxelWorldInstance>()->GameDirectory+"/" +this->GetName()+"X" +FString::FromInt(result.X)+"Y"+FString::FromInt(result.Y)+".bin";
+	filepath  = GetWorld()->GetGameInstance<UVoxelWorldInstance>()->GameDirectory+"/" +"X" +FString::FromInt(result.X)+"Y"+FString::FromInt(result.Y)+".bin";
 	TArray<uint8> BinaryArray;
-	
 
+	
+	
 	if (!FFileHelper::LoadFileToArray(BinaryArray, *filepath))
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to load data from file: %s"), *filepath);
@@ -87,41 +91,48 @@ void AGreedyChunk::BeginPlay()
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT(" load data from file: %s"), *filepath);
-		FMemoryReader FromBinary = FMemoryReader(BinaryArray, false);
-		FromBinary.Seek(0);
+		FArchiveLoadCompressedProxy Decompressor = FArchiveLoadCompressedProxy(BinaryArray, EName::Zlib);
+		if(Decompressor.GetError())
+		{
+			UE_LOG(LogTemp, Error, TEXT("File not compressed %s"), *filepath);
+		}
 		
+		FBufferArchive DecompressedArray = FBufferArchive();
+		Decompressor<< DecompressedArray;
+		FMemoryReader FromBinary = FMemoryReader(DecompressedArray, false);
+		FromBinary.Seek(0);
 		check(MeshData)
 		{
 			FromBinary << *MeshData;
-			
 			FromBinary << Blocks;
 		}
 		
 		
 		
-		// true, free data after done
-		//FMemoryWriter
-		//Tob-
-	
-		//FBufferArchive myData(BinaryArray);
-		//FromBinary.Seek(0);
-		//MeshData FromBinary;
-		//FromBinary <<MeshData;
+		
 		
 		FromBinary.FlushCache();
 		FromBinary.Close();
+		Decompressor.FlushCache();
+		//CompressedData.Empty();
+		DecompressedArray.Empty();
+		DecompressedArray.Close();
 	}
-	
+	TArray<uint8> CompressedData = TArray<uint8>();
+	FArchiveSaveCompressedProxy Compressor = FArchiveSaveCompressedProxy(CompressedData, EName::Zlib);
 	if(MeshData)
 	{
-		ToBinary.Seek(0);
 		
+		ToBinary.Seek(0);
+		//Compressor.Seek(0);
 		ToBinary << *MeshData;
 		ToBinary << Blocks;
+		ToBinary.Flush();
+		Compressor << ToBinary;
+		Compressor.Flush();
 	}
-
 	///FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
-	if (FFileHelper::SaveArrayToFile(ToBinary, *filepath))
+	if (FFileHelper::SaveArrayToFile(CompressedData, *filepath))
 	{
 		
 		UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
@@ -163,13 +174,34 @@ void AGreedyChunk::EditChunk(const FIntVector& position, const EBlockType& block
 	ClearMesh();
 	GenerateMesh();
 	ApplyMesh();
-
-	FBufferArchive NewToBinary;
-	NewToBinary << *MeshData;
-	NewToBinary << Blocks;
 	
+	TArray<uint8> CompressedData = TArray<uint8>();
+	FArchiveSaveCompressedProxy Compressor = FArchiveSaveCompressedProxy(CompressedData, EName::Zlib);
+	if(MeshData)
+	{
+		
+		ToBinary.Seek(0);
+		//Compressor.Seek(0);
+		ToBinary << *MeshData;
+		ToBinary << Blocks;
+		ToBinary.Flush();
+		Compressor << ToBinary;
+		Compressor.Flush();
+	}
+	///FString filepath  = TEXT("C:/Users/James Robertson/Documents/Unreal Projects/AT_UE5_OWLS/GameSaveData/SavedData" + this->GetName()+".bin");
+	if (FFileHelper::SaveArrayToFile(CompressedData, *filepath))
+	{
+		
+		UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to save data to file: %s"), *filepath);
+	}
+	ToBinary.FlushCache();
+	ToBinary.Empty();
 	
-	if ( FFileHelper::SaveArrayToFile(NewToBinary, *filepath))
+	if ( FFileHelper::SaveArrayToFile(CompressedData, *filepath))
 	{
 		
 		UE_LOG(LogTemp, Display, TEXT("Data saved to file: %s"), *filepath);

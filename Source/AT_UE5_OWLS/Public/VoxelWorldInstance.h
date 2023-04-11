@@ -34,7 +34,9 @@ class AT_UE5_OWLS_API UVoxelWorldInstance : public UGameInstance
 
 	UFUNCTION(BlueprintCallable)
 	void LoadChunks();
-	
+	UFUNCTION(BlueprintCallable)
+	void LoadParallelChunks();
+
 	UFUNCTION(BlueprintCallable)
 	void UnloadChunks(FVector position, float area);
 
@@ -46,9 +48,12 @@ class AT_UE5_OWLS_API UVoxelWorldInstance : public UGameInstance
 
 	TArray<Node*> PreviousLoaded;
 	TArray<Node*> Loaded;
+	//TArray<AActor*> ActorsTempArray;
+	
 	
 
 	TArray<AActor*> Query(Node& node, FVector position, float area);
+	
 	void SaveLoadWorld();
 
 	UPROPERTY(EditAnywhere)
