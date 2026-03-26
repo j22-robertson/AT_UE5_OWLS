@@ -7,4 +7,4 @@ A C++ Greedy meshed voxel chunk generation system in UE5 with saving and loading
 * Zlib compression of chunk data
 * Saving of chunk data
 * Loading of chunk data
-* Quad tree optimized procedural generation
+* Quad tree optimized procedural generation/Render distance
